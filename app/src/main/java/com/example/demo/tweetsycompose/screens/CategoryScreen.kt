@@ -1,10 +1,12 @@
 package com.example.demo.tweetsycompose.screens
 
 import android.graphics.fonts.FontStyle
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,15 +15,19 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -31,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.demo.tweetsycompose.R
 import com.example.demo.tweetsycompose.viewmodels.CategoryViewModel
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -43,13 +50,14 @@ fun CategoryScreen(onClick : (category:String) -> Unit) {
 
     if (categories.value.isEmpty()){
 
-        Box(modifier = Modifier.fillMaxSize(1f),
-            contentAlignment = Alignment.Center){
-            Text(
-                text = "Loading...",
-                style = MaterialTheme.typography.headlineLarge
-            )
-        }
+//        Box(modifier = Modifier.fillMaxSize(1f),
+//            contentAlignment = Alignment.Center){
+//            Text(
+//                text = "Loading...",
+//                style = MaterialTheme.typography.headlineLarge
+//            )
+//        }
+        ProgressLoader()
 
     }else{
 
@@ -94,4 +102,31 @@ fun CategoryItem(category:String, onClick : (category:String) -> Unit) {
     }
 
 
+}
+
+@Composable
+fun ProgressLoader() {
+
+    val degree = produceState(initialValue = 0 ){
+        while (true){
+            delay(16)
+            value = ( value +10) % 360
+        }
+    }
+    Box(contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize(1f),
+        content = {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+                Image(imageVector = Icons.Default.Refresh,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .size(60.dp)
+                        .rotate(degree.value.toFloat())
+                )
+
+                Text(text = "Loading...")
+            }
+        })
 }

@@ -33,13 +33,15 @@ fun DetailScreen() {
 
     if (tweets.value.isEmpty()){
 
-        Box(modifier = Modifier.fillMaxSize(1f),
-            contentAlignment = Alignment.Center){
-            Text(
-                text = "Loading...",
-                style = MaterialTheme.typography.headlineLarge
-            )
-        }
+//        Box(modifier = Modifier.fillMaxSize(1f),
+//            contentAlignment = Alignment.Center){
+//            Text(
+//                text = "Loading...",
+//                style = MaterialTheme.typography.headlineLarge
+//            )
+//        }
+
+        ProgressLoader()
 
     }else{
 
